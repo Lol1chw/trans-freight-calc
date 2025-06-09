@@ -12,7 +12,8 @@
   --white: #ffffff;
   --background-primary: #416475;
   --background-secondary: #20323B;
-  --primary: #5BC0F2;
+  --primary: #3d7997;
+  --active: #3C5C96;
   --vt-c-white-soft: #f8f8f8;
   --vt-c-white-mute: #f2f2f2;
 
@@ -35,7 +36,7 @@
 
 /* semantic color variables for this project */
 :root {
-  --color-background: var(--vt-c-white);
+  --color-background: var(--background-primary);
   --color-background-soft: var(--vt-c-white-soft);
   --color-background-mute: var(--vt-c-white-mute);
 
@@ -58,8 +59,7 @@
 
 body {
   min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
+  color: var(--white);
   transition:
     color 0.5s,
     background-color 0.5s;
