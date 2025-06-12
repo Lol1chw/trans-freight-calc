@@ -23,15 +23,15 @@ const city = ref<string>(props.shipmentCity[0])
   <base-card :class="$style['shipment-card']">
     <div :class="$style['shipment-card__content-grid']">
       <div :class="$style['shipment-card__section-header']">
-        <span>{{ direction }}</span>
-        <span :class="$style['shipment-card__section-subtitle']">{{ directionSubLabel }}</span>
+        <span :class="$style['section-header__label']">{{ direction }}</span>
+        <span :class="$style['section-header__sublabel']">{{ directionSubLabel }}</span>
       </div>
 
       <div :class="$style['shipment-card__field-group']">
         <div :class="$style['shipment-card__field-label']">
           Страна
         </div>
-        <div :class="$style['shipment-card__field-helper']">
+        <div :class="$style['shipment-card__field-sublabel']">
           Начните вводить название страны и выберите из списка
         </div>
         <base-select :model-value="country" :options="shipmentCountries" />
@@ -42,7 +42,7 @@ const city = ref<string>(props.shipmentCity[0])
       </div>
 
       <div>
-        <div :class="$style['shipment-card__field-helper']">
+        <div :class="$style['shipment-card__field-sublabel']">
           Введите город/населенный пункт
         </div>
         <base-select :class="$style['shipment-card__transport-hub-select']" placeholder="Введите город/населенный пункт" :model-value="city" :options="shipmentCity" />
@@ -57,9 +57,10 @@ const city = ref<string>(props.shipmentCity[0])
 }
 
 .shipment-card {
-  max-width: 350px;
   border-radius: 12px;
   padding: 28px 32px;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .shipment-card__content-grid {
@@ -73,13 +74,17 @@ const city = ref<string>(props.shipmentCity[0])
   justify-content: space-between;
 }
 
-.shipment-card__section-subtitle {
+.section-header__label {
+  font-size: 14px;
+}
+
+.section-header__sublabel {
   color: var(--primary);
   font-size: 12px;
 }
 
 .shipment-card__field-label,
-.shipment-card__field-helper {
+.shipment-card__field-sublabel {
   color: var(--primary);
 }
 
@@ -87,7 +92,7 @@ const city = ref<string>(props.shipmentCity[0])
   font-size: 12px;
 }
 
-.shipment-card__field-helper {
+.shipment-card__field-sublabel {
   font-size: 10px;
   margin-bottom: 5px;
 }
@@ -99,6 +104,20 @@ const city = ref<string>(props.shipmentCity[0])
 @media screen and (min-width: 350px) {
   .shipment-card__content-grid {
     grid-template-rows: 50px 1fr min-content 1fr;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  .section-header__label {
+    font-size: 16px;
+  }
+
+  .shipment-card__field-label {
+    font-size: 14px;
+  }
+
+  .shipment-card__field-sublabel {
+    font-size: 12px;
   }
 }
 </style>

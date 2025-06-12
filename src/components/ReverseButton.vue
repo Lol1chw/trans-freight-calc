@@ -10,7 +10,7 @@ defineEmits<ReverseButtonEmits>()
 
 <template>
   <button :class="$style.button" @click="$emit('click')">
-    <move-horizontal :class="$style.button__icon" color="#ffffff" stroke-width="1px" width="44px" height="44px" />
+    <move-horizontal :class="$style.button__icon" color="#ffffff" stroke-width="1px" width="32px" height="32px" />
   </button>
 </template>
 
@@ -18,13 +18,19 @@ defineEmits<ReverseButtonEmits>()
 .button {
     background-color: #5BC0F2;
     border-radius: 9999px;
-    min-height: 69px;
-    min-width: 69px;
+    min-height: 44px;
+    min-width: 44px;
     outline: none;
     border: none;
 }
 
 .button__icon {
   transform: rotate(90deg);
+}
+
+@media screen and (min-width: 768px) {
+  .button__icon {
+    transform: none;
+  }
 }
 </style>

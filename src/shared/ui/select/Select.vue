@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { AcceptableValue } from 'reka-ui'
 
+import clsx from 'clsx'
 import { ChevronDown } from 'lucide-vue-next'
 import {
   SelectContent,
@@ -19,6 +20,7 @@ type SelectProps = {
   defaultValue?: AcceptableValue
   placeholder?: string
   class?: string
+  classTrigger?: string
 }
 
 const props = defineProps<SelectProps>()
@@ -27,9 +29,9 @@ const modelValue = defineModel<string>()
 
 <template>
   <select-root v-model="modelValue" :default-value="defaultValue">
-    <select-trigger :class="$style.select__trigger">
-      <select-value :placeholder="placeholder" :class="[$style['select-trigger__value'], props.class]" />
-      <chevron-down :class="$style['select-trigger__chevron']" color="#ffffff" />
+    <select-trigger :class="clsx(props.classTrigger, $style.select__trigger)">
+      <select-value :placeholder="placeholder" :class="clsx(props.class, $style['select-trigger__value'])" />
+      <chevron-down :class="$style['select-trigger__chevron']" />
     </select-trigger>
 
     <select-portal>
@@ -60,6 +62,16 @@ const modelValue = defineModel<string>()
   cursor: pointer;
 }
 
+.select__trigger[data-state='open'] {
+  border: 1px solid #00E0FF;
+}
+
+.select__trigger[data-state='open'] .select-trigger__chevron {
+  color: #00E0FF;
+  transform: rotate(180deg);
+  transition: transform 0.150s ease-in;
+}
+
 .select-trigger__value {
   font-family: 'Inter';
   font-weight: 400;
@@ -75,33 +87,30 @@ const modelValue = defineModel<string>()
   background-color: var(--background-secondary);
   width: var(--reka-select-trigger-width);
   max-height: var(--reka-select-content-available-height);
-  border-radius: 0px 0px 8px 8px;
 }
 
 .select-content__viewport {
-  padding: 4px;
-  background-color: #2E393F;
-  border-radius: 8px;
+  background-color: #5BC0F2;
+  border: 1px solid var(--white);
 }
 
 .select__item {
   display: flex;
-  border-radius: 8px;
   padding-inline: 10px;
   height: 35px;
   cursor: pointer;
   font-size: 12px;
-  margin-bottom: 4px;
+  border-bottom: 1px solid var(--white);
 }
 
 .select__item:hover {
-  background-color: var(--active);
+  background-color: #000000;
   opacity: 0.8;
   outline: none;
 }
 
 .select__item[data-state='checked'] {
-  background-color: var(--active);
+  /* background-color: var(--active); */
 }
 
 .select-item-indicator__icon {

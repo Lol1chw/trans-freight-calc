@@ -11,7 +11,7 @@ const modelValue = defineModel<AcceptableValue>()
 </script>
 
 <template>
-  <tabs v-model="modelValue">
+  <tabs v-model="modelValue" class="radio-group">
     <template v-for="cargoType in cargoTypes" :key="cargoType">
       <div>
         <tab-item :value="cargoType" />
@@ -22,8 +22,34 @@ const modelValue = defineModel<AcceptableValue>()
 
 <style lang="css" scoped>
 .radio-group {
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    grid-template-columns: repeat(2, auto);
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(auto-fill, auto);
+  max-width: 400px;
+}
+
+@media screen and (max-width: 300px) {
+  .radio-group > div:first-child .radio-group__button {
+    border-radius: 8px 8px 0 0;
+  }
+
+  .radio-group > div:nth-child(odd):not(:first-child) .radio-group__button {
+    border-radius: 0 0 8px 8px;
+  }
+}
+
+@media screen and (min-width: 300px) {
+  .radio-group {
+    grid-template-columns: repeat(3, auto);
+  }
+
+  .radio-group > div:first-child .radio-group__button {
+    border-radius: 8px 0 0 8px;
+  }
+
+  .radio-group > div:nth-child(odd):not(:first-child) .radio-group__button {
+    border-radius: 0 8px 8px 0;
+    border-left: none;
+  }
 }
 </style>
