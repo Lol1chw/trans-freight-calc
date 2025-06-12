@@ -58,7 +58,7 @@ const city = ref<string>(props.shipmentCity[0])
 
 .shipment-card {
   border-radius: 12px;
-  padding: 28px 32px;
+  padding: 24px;
   width: 100%;
   margin-bottom: 10px;
 }

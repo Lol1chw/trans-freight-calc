@@ -67,7 +67,7 @@ const toggleModelValue = ref<ContainerSizeType>('20’')
 .cargo-card {
   width: 100%;
   border-radius: 12px;
-  padding: 28px 32px;
+  padding: 24px;
 }
 
 .cargo-card__content-grid {
