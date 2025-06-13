@@ -6,7 +6,7 @@ type BaseSwitchProps = {
 }
 
 defineProps<BaseSwitchProps>()
-const modelValue = defineModel<boolean>()
+const modelValue = defineModel<boolean>({ required: true })
 </script>
 
 <template>

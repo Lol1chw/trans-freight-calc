@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import type { AcceptableValue } from 'reka-ui'
 import { TabItem, Tabs } from '@/shared/ui/tabs'
+import type { CargoType } from '@/shared/types/cargo';
 
 type CargoTabsProps = {
   cargoTypes: string[]
 }
 
 defineProps<CargoTabsProps>()
-const modelValue = defineModel<AcceptableValue>()
+const modelValue = defineModel<CargoType>({ required: true })
 </script>
 
 <template>

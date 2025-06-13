@@ -30,7 +30,9 @@ const modelValue = defineModel<string>()
 <template>
   <select-root v-model="modelValue" :default-value="defaultValue">
     <select-trigger :class="clsx(props.classTrigger, $style.select__trigger)">
-      <select-value :placeholder="placeholder" :class="clsx(props.class, $style['select-trigger__value'])" />
+      <select-value :placeholder="placeholder" :class="clsx(props.class, $style['select-trigger__value'])">
+        {{ modelValue }}
+      </select-value>
       <chevron-down :class="$style['select-trigger__chevron']" />
     </select-trigger>
 

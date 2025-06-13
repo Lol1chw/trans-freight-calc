@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { Primitive } from 'reka-ui'
+const modelValue = defineModel<number>({ required: true })
 </script>
 
 <template>
   <div :class="$style['input-group']">
-    <primitive as="input" :class="$style['input-group__input']" />
+    <input v-model="modelValue" :class="$style['input-group__input']" />
     <slot />
   </div>
 </template>
@@ -19,7 +19,7 @@ import { Primitive } from 'reka-ui'
   color: var(--white);
   border: 1px solid var(--white);
   border-radius: 8px 0 0 8px;
-  padding: 0;
+  padding: 0 0 0 10px;
   width: 100%;
   height: 50px;
 }

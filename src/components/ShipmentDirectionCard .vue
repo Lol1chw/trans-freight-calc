@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import TransportHubTabs from '@/components/TransportHubTabs.vue'
 import { BaseCard } from '@/shared/ui/card'
 import { BaseSelect } from '@/shared/ui/select'
@@ -12,11 +11,12 @@ type ShipmentDirectionCardProps = {
   transportHubs: string[]
 }
 
-const props = defineProps<ShipmentDirectionCardProps>()
+defineProps<ShipmentDirectionCardProps>()
 
-const country = ref<string>(props.shipmentCountries[0])
-const transportHubSelected = ref<string>(props.transportHubs[0])
-const city = ref<string>(props.shipmentCity[0])
+const country = defineModel<string>('country', { required: true })
+const transportHubSelected = defineModel<string>('transport-hub-selected', { required: true })
+const city = defineModel<string>('city', { required: true })
+
 </script>
 
 <template>
@@ -34,7 +34,7 @@ const city = ref<string>(props.shipmentCity[0])
         <div :class="$style['shipment-card__field-sublabel']">
           Начните вводить название страны и выберите из списка
         </div>
-        <base-select :model-value="country" :options="shipmentCountries" />
+        <base-select v-model="country" :options="shipmentCountries" />
       </div>
 
       <div :class="$style['shipment-card__field-group']">
@@ -45,7 +45,7 @@ const city = ref<string>(props.shipmentCity[0])
         <div :class="$style['shipment-card__field-sublabel']">
           Введите город/населенный пункт
         </div>
-        <base-select :class="$style['shipment-card__transport-hub-select']" placeholder="Введите город/населенный пункт" :model-value="city" :options="shipmentCity" />
+        <base-select :class="$style['shipment-card__transport-hub-select']" placeholder="Введите город/населенный пункт" v-model="city" :options="shipmentCity" />
       </div>
     </div>
   </base-card>

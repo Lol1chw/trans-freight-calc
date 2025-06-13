@@ -2,14 +2,14 @@
 import { MoveHorizontal } from 'lucide-vue-next'
 
 type ReverseButtonEmits = {
-  (event: 'click'): void
+  (event: 'reverse-click'): void
 }
 
-defineEmits<ReverseButtonEmits>()
+const emit = defineEmits<ReverseButtonEmits>()
 </script>
 
 <template>
-  <button :class="$style.button" @click="$emit('click')">
+  <button type="button" :class="$style.button" @click="emit('reverse-click')">
     <move-horizontal :class="$style.button__icon" color="#ffffff" stroke-width="1px" width="32px" height="32px" />
   </button>
 </template>
@@ -22,10 +22,12 @@ defineEmits<ReverseButtonEmits>()
     min-width: 44px;
     outline: none;
     border: none;
+    cursor: pointer;
 }
 
 .button__icon {
   transform: rotate(90deg);
+  pointer-events: none;
 }
 
 @media screen and (min-width: 768px) {

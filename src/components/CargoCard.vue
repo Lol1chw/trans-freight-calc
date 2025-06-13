@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { BaseCard } from '@/shared/ui/card'
 import { InputGroup } from '@/shared/ui/input-group'
 import { NumberInput } from '@/shared/ui/number-input'
 import { BaseSelect } from '@/shared/ui/select'
 import { Toggle, ToggleGroup } from '@/shared/ui/toggle'
 import CargoTabs from './CargoTabs.vue'
+import type { CargoType, ContainerSizeType } from '@/shared/types/cargo'
 
-type ContainerSizeType = '20’' | '40’' | '40’HC'
-
-const cargoTypes = ['Контейнеры', 'Коробки/Палеты', 'Машины']
-const toggleModelValue = ref<ContainerSizeType>('20’')
+const cargoTypes: CargoType[] = ['Контейнеры', 'Коробки/Палеты', 'Машины']
+const cargoTypeModel = defineModel<CargoType>('cargo-type', { required: true })
+const cargoCountModel = defineModel<number>('cargo-count', { required: true })
+const cargoContainerSizeModel = defineModel<ContainerSizeType>('cargo-size-type', { required: true })
+const cargoWeightModel = defineModel<number>('cargo-weight', { required: true })
+const cargoWeightTypeModel = defineModel<'KG'>('cargo-weight-type', { required: true })
 </script>
 
 <template>
@@ -20,18 +22,18 @@ const toggleModelValue = ref<ContainerSizeType>('20’')
         <span>Груз</span>
       </div>
 
-      <cargo-tabs :cargo-types="cargoTypes" />
+      <cargo-tabs v-model="cargoTypeModel" :cargo-types="cargoTypes" />
 
       <div :class="$style['cargo-card__section-calculate']">
         <div :class="$style['section-calculate__wrapper']">
           <div :class="$style['section-calculate__input-wrapper']">
             <label :class="$style['section-calculate__label']">Количество (шт)</label>
-            <number-input />
+            <number-input v-model="cargoCountModel" />
           </div>
 
           <div>
             <label :class="$style['section-calculate__label']">Тип контейнера</label>
-            <toggle-group v-model="toggleModelValue" :class="$style['section-calculate__container-type-toggle']">
+            <toggle-group v-model="cargoContainerSizeModel" :class="$style['section-calculate__container-type-toggle']">
               <toggle :class="$style['cointaer-type-toggle__item']" value="20’">
                 20’
               </toggle>
@@ -47,8 +49,8 @@ const toggleModelValue = ref<ContainerSizeType>('20’')
 
         <div :class="$style['section-calculate__container-weight']">
           <label :class="$style['section-calculate__label']">Вес</label>
-          <input-group>
-            <base-select :options="['KG']" default-value="KG" :class-trigger="$style.select" />
+          <input-group v-model="cargoWeightModel">
+            <base-select v-model="cargoWeightTypeModel" :options="['KG']" default-value="KG" :class-trigger="$style.select" />
           </input-group>
         </div>
       </div>
