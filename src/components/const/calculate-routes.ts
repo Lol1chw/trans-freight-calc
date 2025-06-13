@@ -119,7 +119,7 @@ export function calculateShippingCost(
     adjustedVolume = Math.max(volumeCBM, weightKG / 500);
   }
 
-  const rate = packing === 'carton' ? route.rates.carton : route.rates.other;
+  const rate = packing === 'Коробки/Палеты' ? route.rates.carton : route.rates.other;
   let cost = adjustedVolume * rate;
 
   // Добавление DTHC (если есть)
