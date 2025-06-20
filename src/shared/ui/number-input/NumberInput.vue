@@ -2,11 +2,16 @@
 import { ChevronDown, ChevronUp } from 'lucide-vue-next'
 import { NumberFieldDecrement, NumberFieldIncrement, NumberFieldInput, NumberFieldRoot } from 'reka-ui'
 
+type NumberInputProps = {
+  min?: number
+}
+
 const modelValue = defineModel<number>({ required: true })
+defineProps<NumberInputProps>()
 </script>
 
 <template>
-  <number-field-root v-model="modelValue" :class="$style['number-input']">
+  <number-field-root :min="min" v-model="modelValue" :class="$style['number-input']">
     <number-field-input placeholder="Введите кол-во" :class="$style['number-input__input']" />
     <div :class="$style['number-input__button-group']">
       <number-field-increment :class="$style['number-input__button']">

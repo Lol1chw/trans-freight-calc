@@ -3,13 +3,15 @@ import { BaseCard } from '@/shared/ui/card'
 import { InputGroup } from '@/shared/ui/input-group'
 import { NumberInput } from '@/shared/ui/number-input'
 import { BaseSelect } from '@/shared/ui/select'
+import { clsx } from 'clsx'
 import CargoTabs from './CargoTabs.vue'
+
 import type { CargoType } from '@/shared/types/cargo'
 
 const cargoTypes: CargoType[] = ['Коробки/Палеты']
 const cargoTypeModel = defineModel<CargoType>('cargo-type', { required: true })
-const cargoCountModel = defineModel<number>('cargo-count', { required: true })
-const cargoWeightModel = defineModel<string>('cargo-weight', { required: true })
+const cargoVolumeCBMModel = defineModel<number>('cargo-volume', { required: true })
+const cargoWeightModel = defineModel<number>('cargo-weight', { required: true })
 const cargoWeightTypeModel = defineModel<'KG'>('cargo-weight-type', { required: true })
 </script>
 
@@ -25,15 +27,15 @@ const cargoWeightTypeModel = defineModel<'KG'>('cargo-weight-type', { required: 
 
           <div :class="$style['section-calculate__wrapper']">
             <div :class="$style['section-calculate__input-wrapper']">
-              <label :class="$style['section-calculate__label']">Количество (шт)</label>
-              <number-input v-model="cargoCountModel" />
+              <label :class="$style['section-calculate__label']">Объем</label>
+              <number-input :min="1" v-model="cargoVolumeCBMModel" />
             </div>
           </div>
 
           <div :class="$style['section-calculate__container-weight']">
             <label :class="$style['section-calculate__label']">Вес</label>
-            <input-group v-model="cargoWeightModel">
-              <base-select v-model="cargoWeightTypeModel" :options="['KG']" default-value="KG" :class-trigger="$style.select" />
+            <input-group :min="500" v-model="cargoWeightModel">
+              <base-select disabled v-model="cargoWeightTypeModel" :options="['KG']" default-value="KG" :class-trigger="clsx($style.select, $style['select--disabled'])" />
             </input-group>
           </div>
         </div>
@@ -47,6 +49,11 @@ const cargoWeightTypeModel = defineModel<'KG'>('cargo-weight-type', { required: 
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   max-width: 60px;
+}
+
+.select--disabled {
+  background-color: #2d3a42;
+  opacity: 0.5;
 }
 
 .cargo-card {

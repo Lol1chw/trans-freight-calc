@@ -1,10 +1,19 @@
 <script setup lang="ts">
-const modelValue = defineModel<string>({ required: true })
+import { NumberFieldInput, NumberFieldRoot } from 'reka-ui'
+
+type InputGroupProps = {
+  min?: number
+}
+
+const modelValue = defineModel<number>({ required: true })
+defineProps<InputGroupProps>()
 </script>
 
 <template>
   <div :class="$style['input-group']">
-    <input v-model="modelValue" :class="$style['input-group__input']" />
+    <number-field-root :min="min" v-model="modelValue" :class="$style['number-input']">
+      <number-field-input placeholder="Введите кол-во" :class="$style['input-group__input']" />
+    </number-field-root>
     <slot />
   </div>
 </template>

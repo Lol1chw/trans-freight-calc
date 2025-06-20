@@ -40,8 +40,8 @@ const emits = defineEmits<CalculateResultDialogEmits>()
                     <div>Город отправления: {{ params.from }}</div>
                     <div>Город получения: {{ params.to }}</div>
                     <div>Тип груза: {{ params.cargoType }}</div>
-                    <div>Вес: {{ params.weight }}</div>
-                    <div>Количество {{ params.count }}</div>
+                    <div>Вес: {{ params.weight || 0 }}</div>
+                    <div>Количество {{ params.volumeCBM || 0 }}</div>
                     <div>Таможенное оформление:
                       <check-circle-icon :class="$style.icon" v-if="params.customsIncluded"/> 
                       <circle-x :class="$style.icon" v-else/>

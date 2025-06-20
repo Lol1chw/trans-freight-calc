@@ -33,7 +33,7 @@ const city = defineModel<string>('city', { required: true })
         <div :class="$style['shipment-card__field-sublabel']">
           Начните вводить название страны и выберите из списка
         </div>
-        <base-select v-model="country" :options="shipmentCountries" />
+        <base-select :class-trigger="$style['field-group__select--disabled']" disabled v-model="country" :options="shipmentCountries" />
       </div>
 
       <div :class="$style['shipment-card__field-group']">
@@ -98,6 +98,11 @@ const city = defineModel<string>('city', { required: true })
 
 .shipment-card__field-group {
   margin-bottom: 15px;
+}
+
+.field-group__select--disabled {
+  background-color: #2d3a42;
+  opacity: 0.5;
 }
 
 @media screen and (min-width: 350px) {
