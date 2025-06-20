@@ -30,6 +30,7 @@ const modelValue = defineModel<boolean>({ required: true })
   position: relative;
   border: none;
   cursor: pointer;
+  padding: 1px 2px;
 }
 
 .switch-root[data-state='checked'] {

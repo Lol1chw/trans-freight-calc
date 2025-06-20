@@ -1,15 +1,29 @@
 <script setup lang="ts">
-import { provide, ref, watch } from 'vue'
-import { CargoCard, ReverseButton, ShipmentDirectionCard } from '@/components'
+import { computed, ref, watch } from 'vue'
+import { CargoCard, ShipmentDirectionCard, CalculateResultDialog } from '@/components'
 import { BaseCard } from '@/shared/ui/card'
 import { BaseSwitch } from '@/shared/ui/switch'
-import type { CargoType, ContainerSizeType } from '@/shared/types/cargo'
-import { calculateShippingCost } from './components/const/calculate-routes'
+import { calculateShippingCost } from '@/components/const/calculate-routes'
+import { ROUTES } from '@/components/const/calculate-routes'
 
+import clsx from 'clsx'
+
+import type { CargoType } from '@/shared/types/cargo'
+import type { ShippingParams } from '@/components/const/calculate-routes'
+
+const defaultValues = {
+  from: 'Hefei',
+  to: 'Moscow',
+  cargoCount: 2,
+  cargoWeight: '500',
+  customsIncluded: false,
+  isCargoInsured: false,
+  cost: 0,
+}
 const fromCFSCountry = ['Китай']
 const toCFSCountry = ['Россия']
-const fromCFS = ['Hefei', 'Suzhou', 'Chongqing-manzhouli', 'Xian-manzhouli', 'Xian-Khorgos/Alashankou', 'Chengdu-Khorgos/Alashankou']
-const toCFS = ['Moscow', 'Saint Petersburg', 'Minsk', 'Kaliningrad']
+const fromCFS = ['Hefei', 'Suzhou', 'Chongqing-manzhouli', "Xi'an-Manzhouli", 'Xian-Khorgos/Alashankou']
+const toCFS = ['Moscow', 'Saint Petersburg', 'Kaliningrad']
 const transportHubs = ['Город', 'Морской порт', 'Аэропорт', 'Ж/Д станция']
 
 type ChinaCity = typeof fromCFS[number];
@@ -28,18 +42,27 @@ type City =
 
 const country = ref<Country>({ from: 'Китай', to: 'Россия' })
 const transportHub = ref<TransportHub>({ from: 'Город', to: 'Город' })
-const city = ref<City>({ from: 'Hefei', to: 'Moscow' })
-const cargoType = ref<CargoType>('Контейнеры')
-const cargoCount = ref<number>(2000)
-const cargoSize = ref<ContainerSizeType>('20’')
-const cargoWeight = ref<number>(111)
+const city = ref<City>({ from: defaultValues.from, to: defaultValues.to })
+const cargoType = ref<CargoType>('Коробки/Палеты')
+const cargoCount = ref<number>(defaultValues.cargoCount)
+const cargoWeight = ref<string>(defaultValues.cargoWeight)
 const cargoWeightType = ref<'KG'>('KG')
 const customsIncluded = ref<boolean>(false)
 const isCargoInsured = ref<boolean>(false)
-const isReversed = ref<boolean>(false)
+const cost = ref<number>(0)
 
-const lastCityFrom = ref<string>('')
-const lastCountryFrom = ref<'Россия' | 'Китай'>()
+// Пример использования
+const params = computed<ShippingParams>(() => {
+  return {
+    from: city.value.from,
+    to: city.value.to,
+    cargoType: cargoType.value,
+    count: Number(cargoCount.value),
+    weight: Number(cargoWeight.value),
+    customsIncluded: customsIncluded.value,
+    insurance: isCargoInsured.value
+  }
+})
 
 watch(transportHub.value, (transportHub) => {
   if (transportHub.from !== 'Город') {
@@ -51,23 +74,27 @@ watch(transportHub.value, (transportHub) => {
   }
 })
 
-watch(isReversed, () => {
-  lastCityFrom.value = city.value.from
-  lastCountryFrom.value = country.value.from
+const filteredToCFS = ref<string[]>([])
 
-  city.value.from = city.value.to
-  city.value.to = lastCityFrom.value
+watch(params, (params) => {
+  if (params.from) {
+    const filteredRoutesTo = ROUTES.filter((el) => el.from === params.from).flatMap((el) => el.to)
+    filteredToCFS.value = filteredRoutesTo
+    if (!filteredRoutesTo.includes(city.value.to)) {
+      city.value.to = filteredRoutesTo[0]
+    }
+  }
+}, { immediate: true })
 
-  country.value.from = country.value.to
-  country.value.to = lastCountryFrom.value
-
-}, { deep: true })
-
-function handleReverseClick() {
-  isReversed.value = !isReversed.value
+function calculateReset() {
+  city.value.from = defaultValues.from
+  city.value.to = defaultValues.to
+  cargoCount.value = defaultValues.cargoCount
+  cargoWeight.value = defaultValues.cargoWeight
+  customsIncluded.value = defaultValues.customsIncluded
+  isCargoInsured.value = defaultValues.isCargoInsured
+  cost.value = defaultValues.cost
 }
-
-function handleSumbitForm() {}
 </script>
 
 <template>
@@ -75,7 +102,7 @@ function handleSumbitForm() {}
     <div :class="$style.calculator__title">
       Получите рассчет стоимости заказа
     </div>
-    <form @submit="handleSumbitForm" :class="$style.form">
+    <form :class="$style.form">
       <h1 :class="$style.form__title">
         Рассчитать перевозку онлайн
       </h1>
@@ -88,13 +115,9 @@ function handleSumbitForm() {}
             v-model:country="country.from" direction="Откуда"
             direction-sub-label="Пункт назначения"
             :transport-hubs="transportHubs"
-            :shipment-countries="!isReversed ? fromCFSCountry : toCFSCountry"
-            :shipment-city="!isReversed ? fromCFS : toCFS"
+            :shipment-countries="fromCFSCountry"
+            :shipment-city="fromCFS"
           />
-
-          <div :class="$style['shipment-direction__reverse-button']">
-            <reverse-button @reverse-click="handleReverseClick"/>
-          </div>
 
           <shipment-direction-card
             v-model:city="city.to"
@@ -103,14 +126,13 @@ function handleSumbitForm() {}
             direction="Куда"
             direction-sub-label="Пункт направления"
             :transport-hubs="transportHubs"
-            :shipment-countries="!isReversed ? toCFSCountry : fromCFSCountry"
-            :shipment-city="!isReversed ? toCFS : fromCFS"
+            :shipment-countries="toCFSCountry"
+            :shipment-city="filteredToCFS"
           />
         </div>
 
         <div :class="$style.form__cargo">
           <cargo-card
-            v-model:cargo-size-type="cargoSize"
             v-model:cargo-count="cargoCount"
             v-model:cargo-type="cargoType"
             v-model:cargo-weight="cargoWeight"
@@ -127,6 +149,15 @@ function handleSumbitForm() {}
           <base-switch v-model="isCargoInsured" id="Страхование груза" />
           <label for="Страхование груза" :class="$style['switch-card__label']">Страхование груза</label>
         </base-card>
+
+        <div :class="$style['form__button-group']">
+          <button :class="clsx($style['button-group__button'], $style['button-group__button--reset'])" @click.prevent="calculateReset">Сбросить</button>
+          <calculate-result-dialog 
+            :cost="cost" 
+            :params="params" 
+            :class="clsx($style['button-group__button'], $style['button-group__button--search'])" 
+            @calcualte-cost="cost = calculateShippingCost(params)" />
+        </div>
       </div>
     </form>
   </div>
@@ -170,7 +201,6 @@ function handleSumbitForm() {}
   justify-items: center;
   grid-template-columns: auto;
   grid-template-rows: 1fr;
-  position: relative;
 }
 
 .shipment-direction__reverse-button {
@@ -201,6 +231,50 @@ function handleSumbitForm() {}
   font-family: 'Inter';
   font-weight: 500;
   cursor: pointer;
+}
+
+.form__button-group {
+  display: flex;
+  justify-content: end;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.button-group__button {
+  font-family: 'Inter';
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid;
+  background-color: transparent;
+  min-height: 40px;
+  width: 100%;
+  max-width: 115px;
+  cursor: pointer;
+}
+
+.button-group__button:hover {
+  border-color: #5BC0F2;
+}
+
+.button-group__button:active {
+  transform: translateY(-0.5px);
+}
+
+.button-group__button--reset {
+  color: #1E1E1E;
+  border-color: #1E1E1E;
+}
+
+.button-group__button--search {
+  color: var(--white);
+  border-color: var(--white);
+}
+
+@media screen and (min-width: 768px) {
+  .button-group__button {
+    max-width: 200px;
+  }
 }
 
 @media screen and (min-width: 768px) {

@@ -16,7 +16,6 @@ defineProps<ShipmentDirectionCardProps>()
 const country = defineModel<string>('country', { required: true })
 const transportHubSelected = defineModel<string>('transport-hub-selected', { required: true })
 const city = defineModel<string>('city', { required: true })
-
 </script>
 
 <template>

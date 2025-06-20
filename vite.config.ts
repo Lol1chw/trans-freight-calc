@@ -10,6 +10,7 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
+  base: '/trans-freight-calc',
   server: {
     port: 5173,
     host: true,

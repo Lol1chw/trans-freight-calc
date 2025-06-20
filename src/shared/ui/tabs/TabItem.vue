@@ -49,10 +49,4 @@ defineProps<TabItemProps>()
 .radio-group__button:active {
   transform: translateY(-0.5px);
 }
-
-@media screen and (min-width: 600px) {
-  .radio-group__button {
-    font-size: 12px;
-  }
-}
 </style>

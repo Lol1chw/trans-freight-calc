@@ -79,4 +79,10 @@ const modelValue = defineModel<AcceptableValue>()
         border-left: none;
     }
 }
+
+@media screen and (min-width: 600px) {
+    .radio-group__button {
+        font-size: 12px;
+    }
+}
 </style>

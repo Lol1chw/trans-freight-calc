@@ -3,15 +3,13 @@ import { BaseCard } from '@/shared/ui/card'
 import { InputGroup } from '@/shared/ui/input-group'
 import { NumberInput } from '@/shared/ui/number-input'
 import { BaseSelect } from '@/shared/ui/select'
-import { Toggle, ToggleGroup } from '@/shared/ui/toggle'
 import CargoTabs from './CargoTabs.vue'
-import type { CargoType, ContainerSizeType } from '@/shared/types/cargo'
+import type { CargoType } from '@/shared/types/cargo'
 
-const cargoTypes: CargoType[] = ['Контейнеры', 'Коробки/Палеты', 'Машины']
+const cargoTypes: CargoType[] = ['Коробки/Палеты']
 const cargoTypeModel = defineModel<CargoType>('cargo-type', { required: true })
 const cargoCountModel = defineModel<number>('cargo-count', { required: true })
-const cargoContainerSizeModel = defineModel<ContainerSizeType>('cargo-size-type', { required: true })
-const cargoWeightModel = defineModel<number>('cargo-weight', { required: true })
+const cargoWeightModel = defineModel<string>('cargo-weight', { required: true })
 const cargoWeightTypeModel = defineModel<'KG'>('cargo-weight-type', { required: true })
 </script>
 
@@ -22,38 +20,23 @@ const cargoWeightTypeModel = defineModel<'KG'>('cargo-weight-type', { required: 
         <span>Груз</span>
       </div>
 
-      <cargo-tabs v-model="cargoTypeModel" :cargo-types="cargoTypes" />
+        <div :class="$style['cargo-card__section-calculate']">
+          <cargo-tabs v-model="cargoTypeModel" :cargo-types="cargoTypes" />
 
-      <div :class="$style['cargo-card__section-calculate']">
-        <div :class="$style['section-calculate__wrapper']">
-          <div :class="$style['section-calculate__input-wrapper']">
-            <label :class="$style['section-calculate__label']">Количество (шт)</label>
-            <number-input v-model="cargoCountModel" />
+          <div :class="$style['section-calculate__wrapper']">
+            <div :class="$style['section-calculate__input-wrapper']">
+              <label :class="$style['section-calculate__label']">Количество (шт)</label>
+              <number-input v-model="cargoCountModel" />
+            </div>
           </div>
 
-          <div>
-            <label :class="$style['section-calculate__label']">Тип контейнера</label>
-            <toggle-group v-model="cargoContainerSizeModel" :class="$style['section-calculate__container-type-toggle']">
-              <toggle :class="$style['cointaer-type-toggle__item']" value="20’">
-                20’
-              </toggle>
-              <toggle :class="$style['cointaer-type-toggle__item']" value="40’">
-                40’
-              </toggle>
-              <toggle :class="$style['cointaer-type-toggle__item']" value="40’HC">
-                40’HC
-              </toggle>
-            </toggle-group>
+          <div :class="$style['section-calculate__container-weight']">
+            <label :class="$style['section-calculate__label']">Вес</label>
+            <input-group v-model="cargoWeightModel">
+              <base-select v-model="cargoWeightTypeModel" :options="['KG']" default-value="KG" :class-trigger="$style.select" />
+            </input-group>
           </div>
         </div>
-
-        <div :class="$style['section-calculate__container-weight']">
-          <label :class="$style['section-calculate__label']">Вес</label>
-          <input-group v-model="cargoWeightModel">
-            <base-select v-model="cargoWeightTypeModel" :options="['KG']" default-value="KG" :class-trigger="$style.select" />
-          </input-group>
-        </div>
-      </div>
     </div>
   </base-card>
 </template>
@@ -75,8 +58,7 @@ const cargoWeightTypeModel = defineModel<'KG'>('cargo-weight-type', { required: 
 .cargo-card__content-grid {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 50px auto 1fr;
-  row-gap: 10px;
+  grid-template-rows: 50px auto;
 }
 
 .cargo-card__section-header {
@@ -87,6 +69,7 @@ const cargoWeightTypeModel = defineModel<'KG'>('cargo-weight-type', { required: 
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  align-items: end;
   gap: 10px;
 }
 
@@ -94,7 +77,6 @@ const cargoWeightTypeModel = defineModel<'KG'>('cargo-weight-type', { required: 
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  width: 100%;
   max-width: 500px;
   gap: 10px;
 }
@@ -111,56 +93,15 @@ const cargoWeightTypeModel = defineModel<'KG'>('cargo-weight-type', { required: 
   font-family: 'Inter';
 }
 
-.section-calculate__container-type-toggle {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  width: fit-content;
-  max-width: 300px;
-  flex: 1 1 auto;
-}
-
 .section-calculate__container-weight {
   width: 100%;
-  max-width: 150px;
+  max-width: 200px;
 }
 
 @media screen and (max-width: 320px) {
   .section-calculate__wrapper {
     display: flex;
     justify-content: space-between;
-  }
-
-  .section-calculate__container-type-toggle {
-    display: grid;
-    grid-template-columns: repeat(3, auto);
-    row-gap: 10px;
-  }
-}
-
-@media (min-width: 320px) and (max-width: 400px) {
-  .section-calculate__container-type-toggle {
-    display: grid;
-    grid-template-columns: repeat(3, auto);
-    row-gap: 10px;
-  }
-
-  .cointaer-type-toggle__item:nth-child(1) {
-    grid-row: 2 / 2;
-    grid-column: 1 / 1;
-  }
-
-  .cointaer-type-toggle__item:nth-child(2) {
-    grid-row: 2 / 3;
-    grid-column: 2 / 3;
-    margin-left: 8px;
-  }
-
-  .cointaer-type-toggle__item:nth-child(3) {
-    grid-row: 1 / 1;
-    grid-column: 1 / 3;
-    justify-self: center;
-    width: 100%;
   }
 }
 

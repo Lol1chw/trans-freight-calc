@@ -24,8 +24,15 @@ const modelValue = defineModel<CargoType>({ required: true })
 .radio-group {
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: repeat(auto-fill, auto);
-  max-width: 400px;
+  grid-template-columns: 100%;
+  width: 100%;
+  max-width: 200px;
+}
+
+.radio-group__button {
+  width: 100%;
+  min-height: 50px;
+  font-size: 12px;
 }
 
 @media screen and (max-width: 300px) {
@@ -40,7 +47,7 @@ const modelValue = defineModel<CargoType>({ required: true })
 
 @media screen and (min-width: 300px) {
   .radio-group {
-    grid-template-columns: repeat(3, auto);
+    grid-template-columns: 100%;
   }
 
   .radio-group > div:first-child .radio-group__button {
@@ -51,5 +58,9 @@ const modelValue = defineModel<CargoType>({ required: true })
     border-radius: 0 8px 8px 0;
     border-left: none;
   }
+}
+
+.radio-group > div:only-child .radio-group__button {
+  border-radius: 8px;
 }
 </style>
