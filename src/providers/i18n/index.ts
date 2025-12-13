@@ -1,8 +1,8 @@
 import type { I18n, Locale } from 'vue-i18n'
 import { useLocalStorage } from '@vueuse/core'
 
-import { createI18n } from 'vue-i18n'
 import { nextTick } from 'vue'
+import { createI18n } from 'vue-i18n'
 
 const locale = useLocalStorage('transFreightCalcLocale', 'en')
 
