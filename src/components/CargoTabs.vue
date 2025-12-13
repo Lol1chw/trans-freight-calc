@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import type { CargoType } from '@/shared/types/cargo'
+import type { I18nMessagesSchema } from '@/shared/types/i18n'
 import { TabItem, Tabs } from '@/shared/ui/tabs'
+import { useI18n } from 'vue-i18n'
 
 type CargoTabsProps = {
-  cargoTypes: string[]
+  cargoTypes: I18nMessagesSchema['cargoTabs']['cargoTypes']
 }
 
 defineProps<CargoTabsProps>()
@@ -14,7 +16,7 @@ const modelValue = defineModel<CargoType>({ required: true })
   <tabs v-model="modelValue" class="radio-group">
     <template v-for="cargoType in cargoTypes" :key="cargoType">
       <div>
-        <tab-item :value="cargoType" />
+        <tab-item :value="$rt(cargoType)" />
       </div>
     </template>
   </tabs>

@@ -2,6 +2,10 @@
 import { ToastAction, ToastDescription, ToastRoot, ToastTitle, ToastViewport } from 'reka-ui'
 import { BaseCard } from '@/shared/ui/card'
 import { BaseSwitch } from '@/shared/ui/switch'
+import { useI18n } from 'vue-i18n'
+import type { I18nMessagesSchema } from '@/shared/types/i18n'
+
+const { t } = useI18n<{ message: I18nMessagesSchema }>()
 
 type CalculateSwitchProps = {
   id: string
@@ -27,7 +31,7 @@ const modelValue = defineModel<boolean>({ required: true })
       </toast-description>
       <toast-action :class="$style['toast-action']" alt-text="Go to contacts" as-child>
         <button :class="$style['toast-button']">
-          Закрыть
+          {{ t('closeButton') }}
         </button>
       </toast-action>
     </toast-root>

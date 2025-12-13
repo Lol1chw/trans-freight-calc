@@ -1,0 +1,59 @@
+{
+    "header": {
+        "title": "Получите рассчет стоимости заказа"
+    },
+    "form": {
+        "title": "Рассчитать перевозку онлайн"
+    },
+    "shipmentDirectionCard": {
+        "label": "Страна",
+        "description": {
+            "country": "Начните вводить название страны и выберите из списка",
+            "city": "Введите город/населенный пункт"
+        },
+        "direction": {
+            "from": "Откуда",
+            "to": "Куда"
+        },
+        "directionSubLabel": {
+            "from": "Пункт назначения",
+            "to": "Пункт направления"
+        }
+    },
+    "cargoCard": {
+        "title": "Груз",
+        "volume": "Объём",
+        "weight": "Вес"
+    },
+    "cargoTabs": {
+        "cargoTypes": ["Коробки/Паллеты"]
+    },
+    "transportHubs": ["Город", "Морской порт", "Аэропорт", "Ж/Д станция"],
+    "toCFSCountry": ["Россия"],
+    "fromCFSCountry": ["Китай"],
+    "country": {
+        "from": "Китай",
+        "to": "Россия"
+    },
+    "customClearance": {
+        "title": "Таможенное оформление",
+        "description": "Чтобы включить таможенное оформление обратитесь к менеджеру в поле 'Контакты'"
+    },
+    "cargoInsurance": {
+        "title": "Страхование груза",
+        "description": "Чтобы застраховать груз обратитесь к менеджеру в поле 'Контакты'"
+    },
+    "resetButton": "Сбросить",
+    "calculateButton": "Рассчитать",
+    "closeButton": "Закрыть",
+    "calculateResultDialog": {
+        "cost": "Стоимость",
+        "weight": "Вес",
+        "description": "Здесь вы можете ознакомиться с итоговым рассчетом. По завершении нажмите закрыть.",
+        "cityOfDeparture": "Город отправления",
+        "cityOfReceipt": "Город получения",
+        "typeOfCargo": "Тип груза",
+        "amount": "Количество",
+        "finalCalculation": "Итоговый рассчёт"
+    }
+}

@@ -4,8 +4,8 @@ import { BaseCard } from '@/shared/ui/card'
 import { BaseSelect } from '@/shared/ui/select'
 
 type ShipmentDirectionCardProps = {
-  direction: 'Откуда' | 'Куда'
-  directionSubLabel: 'Пункт направления' | 'Пункт назначения'
+  direction: string
+  directionSubLabel: string
   shipmentCountries: string[]
   shipmentCity: string[]
   transportHubs: string[]
@@ -28,10 +28,10 @@ const city = defineModel<string>('city', { required: true })
 
       <div :class="$style['shipment-card__field-group']">
         <div :class="$style['shipment-card__field-label']">
-          Страна
+          {{ $t('shipmentDirectionCard.label') }}
         </div>
         <div :class="$style['shipment-card__field-sublabel']">
-          Начните вводить название страны и выберите из списка
+          {{ $t('shipmentDirectionCard.description.country') }}
         </div>
         <base-select v-model="country" :class-trigger="$style['field-group__select--disabled']" disabled :options="shipmentCountries" />
       </div>
@@ -42,7 +42,7 @@ const city = defineModel<string>('city', { required: true })
 
       <div>
         <div :class="$style['shipment-card__field-sublabel']">
-          Введите город/населенный пункт
+          {{ $t('shipmentDirectionCard.description.city') }}
         </div>
         <base-select v-model="city" :class="$style['shipment-card__transport-hub-select']" placeholder="Введите город/населенный пункт" :options="shipmentCity" />
       </div>

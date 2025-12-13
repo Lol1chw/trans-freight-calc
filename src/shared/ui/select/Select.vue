@@ -39,9 +39,9 @@ const modelValue = defineModel<string>()
     <select-portal>
       <select-content align="center" :class="$style['select-portal__content']" position="popper">
         <select-viewport :class="$style['select-content__viewport']">
-          <select-item v-for="option in options" :key="option" :class="$style.select__item" :value="option">
+          <select-item v-for="option in options" :key="$rt(option)" :class="$style.select__item" :value="$rt(option)">
             <select-item-indicator :class="$style['select-item__indicator']" />
-            <select-item-text>{{ option }}</select-item-text>
+            <select-item-text>{{ $rt(option) }}</select-item-text>
           </select-item>
         </select-viewport>
       </select-content>

@@ -7,8 +7,12 @@ import { NumberInput } from '@/shared/ui/number-input'
 import { BaseSelect } from '@/shared/ui/select'
 
 import CargoTabs from './CargoTabs.vue'
+import { useI18n } from 'vue-i18n'
 
-const cargoTypes: CargoType[] = ['Коробки/Палеты']
+import type { I18nMessagesSchema } from '@/shared/types/i18n'
+
+const { tm } = useI18n<{ message: I18nMessagesSchema }>()
+
 const cargoTypeModel = defineModel<CargoType>('cargo-type', { required: true })
 const cargoVolumeCBMModel = defineModel<number>('cargo-volume', { required: true })
 const cargoWeightModel = defineModel<number>('cargo-weight', { required: true })
@@ -19,21 +23,20 @@ const cargoWeightTypeModel = defineModel<'KG'>('cargo-weight-type', { required: 
   <base-card :class="$style['cargo-card']">
     <div :class="$style['cargo-card__content-grid']">
       <div :class="$style['cargo-card__section-header']">
-        <span>Груз</span>
+        <span>{{ $t('cargoCard.title') }}</span>
       </div>
 
       <div :class="$style['cargo-card__section-calculate']">
-        <cargo-tabs v-model="cargoTypeModel" :cargo-types="cargoTypes" />
-
+        <cargo-tabs v-model="cargoTypeModel" :cargo-types="tm('cargoTabs.cargoTypes')" />
         <div :class="$style['section-calculate__wrapper']">
           <div :class="$style['section-calculate__input-wrapper']">
-            <label :class="$style['section-calculate__label']">Объем</label>
+            <label :class="$style['section-calculate__label']">{{ $t('cargoCard.volume') }}</label>
             <number-input v-model="cargoVolumeCBMModel" :min="1" />
           </div>
         </div>
 
         <div :class="$style['section-calculate__container-weight']">
-          <label :class="$style['section-calculate__label']">Вес</label>
+          <label :class="$style['section-calculate__label']">{{ $t('cargoCard.weight') }}</label>
           <input-group v-model="cargoWeightModel" :min="500">
             <base-select v-model="cargoWeightTypeModel" disabled :options="['KG']" default-value="KG" :class-trigger="clsx($style.select, $style['select--disabled'])" />
           </input-group>
