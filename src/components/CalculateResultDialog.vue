@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { I18nMessagesSchema } from '@/shared/types/i18n'
 import type { ShippingParams } from './const/calculate-routes'
+import type { I18nMessagesSchema } from '@/shared/types/i18n'
 import clsx from 'clsx'
 import { CheckCircleIcon, CircleX } from 'lucide-vue-next'
 import {
@@ -15,6 +15,10 @@ import {
 } from 'reka-ui'
 import { useI18n } from 'vue-i18n'
 
+const props = defineProps<CalculateResultDialogProps>()
+
+const emits = defineEmits<CalculateResultDialogEmits>()
+
 const { t } = useI18n<{ message: I18nMessagesSchema }>()
 
 type CalculateResultDialogProps = {
@@ -26,9 +30,6 @@ type CalculateResultDialogProps = {
 type CalculateResultDialogEmits = {
   (e: 'calcualteCost'): number
 }
-
-const props = defineProps<CalculateResultDialogProps>()
-const emits = defineEmits<CalculateResultDialogEmits>()
 </script>
 
 <template>

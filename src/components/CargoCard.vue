@@ -1,19 +1,18 @@
 <script setup lang="ts">
-import type { CargoType } from '@/shared/types/cargo'
+import type { I18nMessagesSchema } from '@/shared/types/i18n'
 import { clsx } from 'clsx'
+import { useI18n } from 'vue-i18n'
 import { BaseCard } from '@/shared/ui/card'
 import { InputGroup } from '@/shared/ui/input-group'
+
 import { NumberInput } from '@/shared/ui/number-input'
 import { BaseSelect } from '@/shared/ui/select'
 
 import CargoTabs from './CargoTabs.vue'
-import { useI18n } from 'vue-i18n'
-
-import type { I18nMessagesSchema } from '@/shared/types/i18n'
 
 const { tm } = useI18n<{ message: I18nMessagesSchema }>()
 
-const cargoTypeModel = defineModel<CargoType>('cargo-type', { required: true })
+const cargoTypeModel = defineModel<string>('cargo-type', { required: true })
 const cargoVolumeCBMModel = defineModel<number>('cargo-volume', { required: true })
 const cargoWeightModel = defineModel<number>('cargo-weight', { required: true })
 const cargoWeightTypeModel = defineModel<'KG'>('cargo-weight-type', { required: true })

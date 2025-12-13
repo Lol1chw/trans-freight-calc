@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { i18n } from '@/providers/i18n';
+import { useLocalStorage } from '@vueuse/core'
 import { Languages } from 'lucide-vue-next'
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal, DropdownMenuRoot, DropdownMenuTrigger } from 'reka-ui'
-import { useLocalStorage } from '@vueuse/core'
 
 const storageLocale = useLocalStorage('transFreightCalcLocale', 'en')
 </script>
@@ -17,10 +16,13 @@ const storageLocale = useLocalStorage('transFreightCalcLocale', 'en')
 
     <dropdown-menu-portal>
       <dropdown-menu-content :class="$style['switch-language-content']">
-        <dropdown-menu-item v-for="locale in $i18n.availableLocales" :class="$style['switch-language-content__item']" @select="() => {
-          $i18n.locale = locale
-          storageLocale = locale
-        }">
+        <dropdown-menu-item
+          v-for="locale in $i18n.availableLocales" :key="locale" :class="$style['switch-language-content__item']"
+          @select="() => {
+            $i18n.locale = locale
+            storageLocale = locale
+          }"
+        >
           {{ locale }}
         </dropdown-menu-item>
       </dropdown-menu-content>

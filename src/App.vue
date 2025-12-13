@@ -1,15 +1,15 @@
 <script setup lang="ts">
+import type { I18nMessagesSchema } from './shared/types/i18n'
 import type { ShippingParams } from '@/components/const/calculate-routes'
 import clsx from 'clsx'
 import { ToastProvider } from 'reka-ui'
 import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
 import { CalculateResultDialog, CalculateSwitch, CargoCard, ShipmentDirectionCard } from '@/components'
 import { calculateShippingCost, ROUTES } from '@/components/const/calculate-routes'
 
 import { SwitchLanguage } from './components/switch-language'
-import { useI18n } from 'vue-i18n'
-
-import type { I18nMessagesSchema } from './shared/types/i18n'
 
 const { t, tm } = useI18n<{ message: I18nMessagesSchema }>()
 
@@ -34,7 +34,6 @@ type City =
   | { from: RussiaCity, to: ChinaCity }
   | { from: ChinaCity, to: RussiaCity }
 
-
 const city = ref<City>({ from: defaultValues.from, to: defaultValues.to })
 const cargoVolumeCBM = ref<number>(defaultValues.volumeCBM)
 const cargoWeight = ref<number>(defaultValues.weight)
@@ -45,15 +44,15 @@ const cost = ref<number>(0)
 
 const transportHub = computed(() => {
   return {
-    from: tm('transportHubs')[0], 
-    to: tm('transportHubs')[0] 
+    from: tm('transportHubs')[0],
+    to: tm('transportHubs')[0],
   }
 })
 const transportHubs = computed(() => tm('transportHubs'))
 const cargoType = computed(() => tm('cargoTabs.cargoTypes')[0])
 const country = computed(() => ({
   from: t('country.from'),
-  to: t('country.to')
+  to: t('country.to'),
 }))
 
 const params = computed<ShippingParams>(() => {

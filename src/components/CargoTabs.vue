@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import type { CargoType } from '@/shared/types/cargo'
 import type { I18nMessagesSchema } from '@/shared/types/i18n'
 import { TabItem, Tabs } from '@/shared/ui/tabs'
-import { useI18n } from 'vue-i18n'
 
 type CargoTabsProps = {
   cargoTypes: I18nMessagesSchema['cargoTabs']['cargoTypes']
 }
 
 defineProps<CargoTabsProps>()
-const modelValue = defineModel<CargoType>({ required: true })
+const modelValue = defineModel<string>({ required: true })
 </script>
 
 <template>

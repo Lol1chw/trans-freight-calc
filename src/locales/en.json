@@ -1,59 +1,59 @@
 {
-    "header": {
-        "title": "Get a quote for your order"
+  "header": {
+    "title": "Get a quote for your order"
+  },
+  "form": {
+    "title": "Calculate transportation online"
+  },
+  "shipmentDirectionCard": {
+    "label": "Country",
+    "description": {
+      "country": "Start typing the country name and select from list",
+      "city": "Enter city/town"
     },
-    "form": {
-        "title": "Calculate transportation online"
+    "direction": {
+      "from": "From",
+      "to": "To"
     },
-    "shipmentDirectionCard": {
-        "label": "Country",
-        "description": {
-            "country": "Start typing the country name and select from list",
-            "city": "Enter city/town"
-        },
-        "direction": {
-            "from": "From",
-            "to": "To"
-        },
-        "directionSubLabel": {
-            "from": "Destination",
-            "to": "Direction point"
-        }
-    },
-    "cargoCard": {
-        "title": "Cargo",
-        "volume": "Volume",
-        "weight": "Weight"
-    },
-    "cargoTabs": {
-        "cargoTypes": ["Boxes/Pallets"]
-    },
-    "transportHubs": ["City", "Seaport", "Airport", "Railway station"],
-    "toCFSCountry": ["Russia"],
-    "fromCFSCountry": ["China"],
-    "country": {
-        "from": "China",
-        "to": "Russia"
-    },
-    "customClearance": {
-        "title": "Customs clearance",
-        "description": "To enable customs clearance, please contact the manager in the ‘Contacts’ field."
-    },
-    "cargoInsurance": {
-        "title": "Cargo insurance",
-        "description": "To insure your shipment, please contact the manager in the ‘Contacts’ field."
-    },
-    "resetButton": "Reset",
-    "calculateButton": "Calculate",
-    "closeButton": "Close",
-    "calculateResultDialog": {
-        "cost": "Cost",
-        "weight": "Weight",
-        "description": "Here you can view the final calculation. When finished, click Close.",
-        "cityOfDeparture": "City Of Departure",
-        "cityOfReceipt": "City of receipt",
-        "typeOfCargo": "Type of cargo",
-        "amount": "Amount",
-        "finalCalculation": "Final calculation"
+    "directionSubLabel": {
+      "from": "Destination",
+      "to": "Direction point"
     }
+  },
+  "cargoCard": {
+    "title": "Cargo",
+    "volume": "Volume",
+    "weight": "Weight"
+  },
+  "cargoTabs": {
+    "cargoTypes": ["Boxes/Pallets"]
+  },
+  "transportHubs": ["City", "Seaport", "Airport", "Railway station"],
+  "toCFSCountry": ["Russia"],
+  "fromCFSCountry": ["China"],
+  "country": {
+    "from": "China",
+    "to": "Russia"
+  },
+  "customClearance": {
+    "title": "Customs clearance",
+    "description": "To enable customs clearance, please contact the manager in the ‘Contacts’ field."
+  },
+  "cargoInsurance": {
+    "title": "Cargo insurance",
+    "description": "To insure your shipment, please contact the manager in the ‘Contacts’ field."
+  },
+  "resetButton": "Reset",
+  "calculateButton": "Calculate",
+  "closeButton": "Close",
+  "calculateResultDialog": {
+    "cost": "Cost",
+    "weight": "Weight",
+    "description": "Here you can view the final calculation. When finished, click Close.",
+    "cityOfDeparture": "City Of Departure",
+    "cityOfReceipt": "City of receipt",
+    "typeOfCargo": "Type of cargo",
+    "amount": "Amount",
+    "finalCalculation": "Final calculation"
+  }
 }

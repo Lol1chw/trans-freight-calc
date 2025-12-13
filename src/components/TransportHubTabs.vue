@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import type { AcceptableValue } from 'reka-ui'
-import { TabItem, Tabs } from '@/shared/ui/tabs'
-import { useI18n } from 'vue-i18n'
 import type { I18nMessagesSchema } from '@/shared/types/i18n'
+import { useI18n } from 'vue-i18n'
+import { TabItem, Tabs } from '@/shared/ui/tabs'
 
 type TransportHubTabsProps = {
   transportHubs: string[]
 }
 
+defineProps<TransportHubTabsProps>()
+
 const { rt } = useI18n<{ message: I18nMessagesSchema }>()
 
-defineProps<TransportHubTabsProps>()
 const modelValue = defineModel<AcceptableValue>()
 </script>
 

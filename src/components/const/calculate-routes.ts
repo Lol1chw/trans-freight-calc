@@ -1,5 +1,3 @@
-import type { CargoType } from '@/shared/types/cargo'
-
 interface Route {
   from: string
   to: string
@@ -22,7 +20,7 @@ export const ROUTES: Route[] = [
 export interface ShippingParams {
   from: string
   to: string
-  cargoType: CargoType
+  cargoType: string
   volumeCBM: number
   weight: number
   customsIncluded: boolean

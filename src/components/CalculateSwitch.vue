@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import type { I18nMessagesSchema } from '@/shared/types/i18n'
 import { ToastAction, ToastDescription, ToastRoot, ToastTitle, ToastViewport } from 'reka-ui'
+import { useI18n } from 'vue-i18n'
 import { BaseCard } from '@/shared/ui/card'
 import { BaseSwitch } from '@/shared/ui/switch'
-import { useI18n } from 'vue-i18n'
-import type { I18nMessagesSchema } from '@/shared/types/i18n'
+
+defineProps<CalculateSwitchProps>()
 
 const { t } = useI18n<{ message: I18nMessagesSchema }>()
 
@@ -14,7 +16,6 @@ type CalculateSwitchProps = {
   toastDescription: string
 }
 
-defineProps<CalculateSwitchProps>()
 const modelValue = defineModel<boolean>({ required: true })
 </script>
 
