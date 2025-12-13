@@ -1,12 +1,12 @@
 <script setup lang="ts">
+import type { CargoType } from '@/shared/types/cargo'
+import { clsx } from 'clsx'
 import { BaseCard } from '@/shared/ui/card'
 import { InputGroup } from '@/shared/ui/input-group'
 import { NumberInput } from '@/shared/ui/number-input'
 import { BaseSelect } from '@/shared/ui/select'
-import { clsx } from 'clsx'
-import CargoTabs from './CargoTabs.vue'
 
-import type { CargoType } from '@/shared/types/cargo'
+import CargoTabs from './CargoTabs.vue'
 
 const cargoTypes: CargoType[] = ['Коробки/Палеты']
 const cargoTypeModel = defineModel<CargoType>('cargo-type', { required: true })
@@ -22,23 +22,23 @@ const cargoWeightTypeModel = defineModel<'KG'>('cargo-weight-type', { required: 
         <span>Груз</span>
       </div>
 
-        <div :class="$style['cargo-card__section-calculate']">
-          <cargo-tabs v-model="cargoTypeModel" :cargo-types="cargoTypes" />
+      <div :class="$style['cargo-card__section-calculate']">
+        <cargo-tabs v-model="cargoTypeModel" :cargo-types="cargoTypes" />
 
-          <div :class="$style['section-calculate__wrapper']">
-            <div :class="$style['section-calculate__input-wrapper']">
-              <label :class="$style['section-calculate__label']">Объем</label>
-              <number-input :min="1" v-model="cargoVolumeCBMModel" />
-            </div>
-          </div>
-
-          <div :class="$style['section-calculate__container-weight']">
-            <label :class="$style['section-calculate__label']">Вес</label>
-            <input-group :min="500" v-model="cargoWeightModel">
-              <base-select disabled v-model="cargoWeightTypeModel" :options="['KG']" default-value="KG" :class-trigger="clsx($style.select, $style['select--disabled'])" />
-            </input-group>
+        <div :class="$style['section-calculate__wrapper']">
+          <div :class="$style['section-calculate__input-wrapper']">
+            <label :class="$style['section-calculate__label']">Объем</label>
+            <number-input v-model="cargoVolumeCBMModel" :min="1" />
           </div>
         </div>
+
+        <div :class="$style['section-calculate__container-weight']">
+          <label :class="$style['section-calculate__label']">Вес</label>
+          <input-group v-model="cargoWeightModel" :min="500">
+            <base-select v-model="cargoWeightTypeModel" disabled :options="['KG']" default-value="KG" :class-trigger="clsx($style.select, $style['select--disabled'])" />
+          </input-group>
+        </div>
+      </div>
     </div>
   </base-card>
 </template>

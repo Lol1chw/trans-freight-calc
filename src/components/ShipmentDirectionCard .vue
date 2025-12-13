@@ -33,7 +33,7 @@ const city = defineModel<string>('city', { required: true })
         <div :class="$style['shipment-card__field-sublabel']">
           Начните вводить название страны и выберите из списка
         </div>
-        <base-select :class-trigger="$style['field-group__select--disabled']" disabled v-model="country" :options="shipmentCountries" />
+        <base-select v-model="country" :class-trigger="$style['field-group__select--disabled']" disabled :options="shipmentCountries" />
       </div>
 
       <div :class="$style['shipment-card__field-group']">
@@ -44,7 +44,7 @@ const city = defineModel<string>('city', { required: true })
         <div :class="$style['shipment-card__field-sublabel']">
           Введите город/населенный пункт
         </div>
-        <base-select :class="$style['shipment-card__transport-hub-select']" placeholder="Введите город/населенный пункт" v-model="city" :options="shipmentCity" />
+        <base-select v-model="city" :class="$style['shipment-card__transport-hub-select']" placeholder="Введите город/населенный пункт" :options="shipmentCity" />
       </div>
     </div>
   </base-card>

@@ -1,5 +1,5 @@
+export { default as CalculateResultDialog } from './CalculateResultDialog.vue'
+export { default as CalculateSwitch } from './CalculateSwitch.vue'
 export { default as CargoCard } from './CargoCard.vue'
 export { default as ReverseButton } from './ReverseButton.vue'
 export { default as ShipmentDirectionCard } from './ShipmentDirectionCard .vue'
-export { default as CalculateResultDialog } from './CalculateResultDialog.vue'
-export { default as CalculateSwitch } from './CalculateSwitch.vue'

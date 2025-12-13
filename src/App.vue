@@ -7,10 +7,6 @@ import { computed, ref, watch } from 'vue'
 import { CalculateResultDialog, CalculateSwitch, CargoCard, ShipmentDirectionCard } from '@/components'
 import { calculateShippingCost, ROUTES } from '@/components/const/calculate-routes'
 
-import { BaseCard } from '@/shared/ui/card'
-
-import { BaseSelect } from '@/shared/ui/select'
-import { BaseSwitch } from '@/shared/ui/switch'
 import { SwitchLanguage } from './components/switch-language'
 
 const defaultValues = {
@@ -26,11 +22,10 @@ const defaultValues = {
 const fromCFSCountry = ['Китай']
 const toCFSCountry = ['Россия']
 const fromCFS = ['Hefei', 'Suzhou', 'Chongqing-manzhouli', 'Xi\'an-Manzhouli', 'Xian-Khorgos/Alashankou']
-const toCFS = ['Moscow', 'Saint Petersburg', 'Kaliningrad']
 const transportHubs = ['Город', 'Морской порт', 'Аэропорт', 'Ж/Д станция']
 
-type ChinaCity = typeof fromCFS[number]
-type RussiaCity = typeof toCFS[number]
+type ChinaCity = string
+type RussiaCity = string
 
 type Country =
   | { from: 'Россия', to: 'Китай' }
@@ -117,7 +112,6 @@ function calculateReset() {
         <div :class="$style.form__wrapper">
           <div :class="$style['form__shipment-direction']">
             <shipment-direction-card
-              ref="comp"
               v-model:city="city.from"
               v-model:transport-hub-selected="transportHub.from"
               v-model:country="country.from" direction="Откуда"
@@ -189,7 +183,7 @@ function calculateReset() {
 .calculator__header {
   display: flex;
   justify-content: space-between;
-  
+
   margin-bottom: 10px;
 }
 

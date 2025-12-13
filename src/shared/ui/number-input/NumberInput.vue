@@ -6,12 +6,12 @@ type NumberInputProps = {
   min?: number
 }
 
-const modelValue = defineModel<number>({ required: true })
 defineProps<NumberInputProps>()
+const modelValue = defineModel<number>({ required: true })
 </script>
 
 <template>
-  <number-field-root :min="min" v-model="modelValue" :class="$style['number-input']">
+  <number-field-root v-model="modelValue" :min="min" :class="$style['number-input']">
     <number-field-input placeholder="Введите кол-во" :class="$style['number-input__input']" />
     <div :class="$style['number-input__button-group']">
       <number-field-increment :class="$style['number-input__button']">

@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import type { CargoType } from '@/shared/types/cargo'
 import { TabItem, Tabs } from '@/shared/ui/tabs'
-import type { CargoType } from '@/shared/types/cargo';
 
 type CargoTabsProps = {
   cargoTypes: string[]

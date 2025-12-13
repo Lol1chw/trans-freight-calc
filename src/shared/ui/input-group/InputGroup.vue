@@ -5,13 +5,13 @@ type InputGroupProps = {
   min?: number
 }
 
-const modelValue = defineModel<number>({ required: true })
 defineProps<InputGroupProps>()
+const modelValue = defineModel<number>({ required: true })
 </script>
 
 <template>
   <div :class="$style['input-group']">
-    <number-field-root :min="min" v-model="modelValue" :class="$style['number-input']">
+    <number-field-root v-model="modelValue" :min="min" :class="$style['number-input']">
       <number-field-input placeholder="Введите кол-во" :class="$style['input-group__input']" />
     </number-field-root>
     <slot />
