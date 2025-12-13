@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { AcceptableValue } from 'reka-ui'
+import type { I18nMessagesSchema } from '@/shared/types/i18n'
+import { useI18n } from 'vue-i18n'
 import { TabItem, Tabs } from '@/shared/ui/tabs'
 
 type TransportHubTabsProps = {
@@ -7,14 +9,17 @@ type TransportHubTabsProps = {
 }
 
 defineProps<TransportHubTabsProps>()
+
+const { rt } = useI18n<{ message: I18nMessagesSchema }>()
+
 const modelValue = defineModel<AcceptableValue>()
 </script>
 
 <template>
   <tabs v-model="modelValue" class="radio-group">
-    <template v-for="(transportHub, index) in transportHubs" :key="transportHub">
+    <template v-for="(transportHub, index) in transportHubs" :key="rt(transportHub)">
       <div>
-        <tab-item :value="transportHub" :disabled="index !== 0" />
+        <tab-item :value="rt(transportHub)" :disabled="index !== 0" />
       </div>
     </template>
   </tabs>

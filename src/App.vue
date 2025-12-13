@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { CargoCard, ShipmentDirectionCard, CalculateResultDialog, CalculateSwitch } from '@/components'
-import { BaseCard } from '@/shared/ui/card'
-import { BaseSwitch } from '@/shared/ui/switch'
-import { calculateShippingCost } from '@/components/const/calculate-routes'
-import { ROUTES } from '@/components/const/calculate-routes'
-
-import clsx from 'clsx'
-
-import type { CargoType } from '@/shared/types/cargo'
+import type { I18nMessagesSchema } from './shared/types/i18n'
 import type { ShippingParams } from '@/components/const/calculate-routes'
+import clsx from 'clsx'
 import { ToastProvider } from 'reka-ui'
+import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+import { CalculateResultDialog, CalculateSwitch, CargoCard, ShipmentDirectionCard } from '@/components'
+import { calculateShippingCost, ROUTES } from '@/components/const/calculate-routes'
+
+import { SwitchLanguage } from './components/switch-language'
+
+const { t, tm } = useI18n<{ message: I18nMessagesSchema }>()
 
 const defaultValues = {
   from: 'Hefei',
@@ -20,32 +21,20 @@ const defaultValues = {
   customsIncluded: false,
   insurance: false,
   cargoType: 'Коробки/Палеты',
-  cost: 0
+  cost: 0,
 }
-const fromCFSCountry = ['Китай']
-const toCFSCountry = ['Россия']
-const fromCFS = ['Hefei', 'Suzhou', 'Chongqing-manzhouli', "Xi'an-Manzhouli", 'Xian-Khorgos/Alashankou']
-const toCFS = ['Moscow', 'Saint Petersburg', 'Kaliningrad']
-const transportHubs = ['Город', 'Морской порт', 'Аэропорт', 'Ж/Д станция']
+const fromCFSCountry = tm('fromCFSCountry')
+const toCFSCountry = tm('toCFSCountry')
+const fromCFS = ['Hefei', 'Suzhou', 'Chongqing-manzhouli', 'Xi\'an-Manzhouli', 'Xian-Khorgos/Alashankou']
 
-type ChinaCity = typeof fromCFS[number];
-type RussiaCity = typeof toCFS[number];
-
-type Country =
-  | { from: 'Россия', to: 'Китай' }
-  | { from: 'Китай', to: 'Россия' }
-
-type TransportHub = { from: 'Город', to: 'Город' }
+type ChinaCity = string
+type RussiaCity = string
 
 type City =
   | { from: RussiaCity, to: ChinaCity }
   | { from: ChinaCity, to: RussiaCity }
 
-
-const country = ref<Country>({ from: 'Китай', to: 'Россия' })
-const transportHub = ref<TransportHub>({ from: 'Город', to: 'Город' })
 const city = ref<City>({ from: defaultValues.from, to: defaultValues.to })
-const cargoType = ref<CargoType>('Коробки/Палеты')
 const cargoVolumeCBM = ref<number>(defaultValues.volumeCBM)
 const cargoWeight = ref<number>(defaultValues.weight)
 const cargoWeightType = ref<'KG'>('KG')
@@ -53,7 +42,19 @@ const customsIncluded = ref<boolean>(false)
 const isCargoInsured = ref<boolean>(false)
 const cost = ref<number>(0)
 
-// Пример использования
+const transportHub = computed(() => {
+  return {
+    from: tm('transportHubs')[0],
+    to: tm('transportHubs')[0],
+  }
+})
+const transportHubs = computed(() => tm('transportHubs'))
+const cargoType = computed(() => tm('cargoTabs.cargoTypes')[0])
+const country = computed(() => ({
+  from: t('country.from'),
+  to: t('country.to'),
+}))
+
 const params = computed<ShippingParams>(() => {
   return {
     from: city.value.from,
@@ -62,17 +63,7 @@ const params = computed<ShippingParams>(() => {
     volumeCBM: Number(cargoVolumeCBM.value),
     weight: Number(cargoWeight.value),
     customsIncluded: customsIncluded.value,
-    insurance: isCargoInsured.value
-  }
-})
-
-watch(transportHub.value, (transportHub) => {
-  if (transportHub.from !== 'Город') {
-    transportHub.from = 'Город'
-  }
-
-  if (transportHub.to !== 'Город') {
-    transportHub.to = 'Город'
+    insurance: isCargoInsured.value,
   }
 })
 
@@ -80,7 +71,7 @@ const filteredToCFS = ref<string[]>([])
 
 watch(params, (params) => {
   if (params.from) {
-    const filteredRoutesTo = ROUTES.filter((el) => el.from === params.from).flatMap((el) => el.to)
+    const filteredRoutesTo = ROUTES.filter(el => el.from === params.from).flatMap(el => el.to)
     filteredToCFS.value = filteredRoutesTo
     if (!filteredRoutesTo.includes(city.value.to)) {
       city.value.to = filteredRoutesTo[0]
@@ -102,21 +93,25 @@ function calculateReset() {
 <template>
   <toast-provider>
     <div :class="$style.calculator">
-      <div :class="$style.calculator__title">
-        Получите рассчет стоимости заказа
+      <div :class="$style.calculator__header">
+        <div :class="$style.calculator__title">
+          {{ $t('header.title') }}
+        </div>
+        <div>
+          <switch-language />
+        </div>
       </div>
       <form :class="$style.form">
         <h1 :class="$style.form__title">
-          Рассчитать перевозку онлайн
+          {{ $t('form.title') }}
         </h1>
         <div :class="$style.form__wrapper">
           <div :class="$style['form__shipment-direction']">
             <shipment-direction-card
-              ref="comp"
               v-model:city="city.from"
               v-model:transport-hub-selected="transportHub.from"
-              v-model:country="country.from" direction="Откуда"
-              direction-sub-label="Пункт назначения"
+              v-model:country="country.from" :direction="$t('shipmentDirectionCard.direction.from')"
+              :direction-sub-label="$t('shipmentDirectionCard.directionSubLabel.from')"
               :transport-hubs="transportHubs"
               :shipment-countries="fromCFSCountry"
               :shipment-city="fromCFS"
@@ -126,8 +121,8 @@ function calculateReset() {
               v-model:city="city.to"
               v-model:transport-hub-selected="transportHub.to"
               v-model:country="country.to"
-              direction="Куда"
-              direction-sub-label="Пункт направления"
+              :direction="$t('shipmentDirectionCard.direction.to')"
+              :direction-sub-label="t('shipmentDirectionCard.directionSubLabel.to')"
               :transport-hubs="transportHubs"
               :shipment-countries="toCFSCountry"
               :shipment-city="filteredToCFS"
@@ -142,30 +137,33 @@ function calculateReset() {
               v-model:cargo-weight-type="cargoWeightType"
             />
           </div>
-          
-          <calculate-switch 
-            v-model="customsIncluded" 
-            id="Таможенное оформление" 
-            label="Таможенное оформление" 
-            toast-title="Таможенное оформление" 
-            toast-description="Чтобы включить таможенное оформление обратитесь к менеджеру в поле 'Контакты'"
+
+          <calculate-switch
+            :id="t('customClearance.title')"
+            v-model="customsIncluded"
+            :label="t('customClearance.title')"
+            :toast-title="t('customClearance.title')"
+            :toast-description="t('customClearance.description')"
           />
 
-          <calculate-switch 
-            v-model="isCargoInsured" 
-            id="Страхование груза" 
-            label="Страхование груза" 
-            toast-title="Страхование груза" 
-            toast-description="Чтобы застраховать груз обратитесь к менеджеру в поле 'Контакты'"
+          <calculate-switch
+            :id="t('cargoInsurance.title')"
+            v-model="isCargoInsured"
+            :label="t('cargoInsurance.title')"
+            :toast-title="t('cargoInsurance.title')"
+            :toast-description="t('cargoInsurance.description')"
           />
 
           <div :class="$style['form__button-group']">
-            <button :class="clsx($style['button-group__button'], $style['button-group__button--reset'])" @click.prevent="calculateReset">Сбросить</button>
-            <calculate-result-dialog 
-              :cost="cost" 
-              :params="params" 
-              :class="clsx($style['button-group__button'], $style['button-group__button--search'])" 
-              @calcualte-cost="cost = calculateShippingCost(params)" />
+            <button :class="clsx($style['button-group__button'], $style['button-group__button--reset'])" @click.prevent="calculateReset">
+              {{ t('resetButton') }}
+            </button>
+            <calculate-result-dialog
+              :cost="cost"
+              :params="params"
+              :class="clsx($style['button-group__button'], $style['button-group__button--search'])"
+              @calcualte-cost="cost = calculateShippingCost(params)"
+            />
           </div>
         </div>
       </form>
@@ -174,9 +172,15 @@ function calculateReset() {
 </template>
 
 <style lang="css" module>
-
 .calculator {
   padding: 12px;
+}
+
+.calculator__header {
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 10px;
 }
 
 .calculator__title {
@@ -184,7 +188,6 @@ function calculateReset() {
   font-family: 500;
   font-size: 14px;
   padding-left: 12px;
-  margin-bottom: 10px;
 }
 
 .form {

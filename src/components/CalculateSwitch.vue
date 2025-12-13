@@ -1,7 +1,13 @@
 <script setup lang="ts">
+import type { I18nMessagesSchema } from '@/shared/types/i18n'
 import { ToastAction, ToastDescription, ToastRoot, ToastTitle, ToastViewport } from 'reka-ui'
-import { BaseSwitch } from '@/shared/ui/switch';
-import { BaseCard } from '@/shared/ui/card';
+import { useI18n } from 'vue-i18n'
+import { BaseCard } from '@/shared/ui/card'
+import { BaseSwitch } from '@/shared/ui/switch'
+
+defineProps<CalculateSwitchProps>()
+
+const { t } = useI18n<{ message: I18nMessagesSchema }>()
 
 type CalculateSwitchProps = {
   id: string
@@ -10,23 +16,28 @@ type CalculateSwitchProps = {
   toastDescription: string
 }
 
-const modelValue = defineModel<boolean>({required: true})
-defineProps<CalculateSwitchProps>()
+const modelValue = defineModel<boolean>({ required: true })
 </script>
 
 <template>
-    <base-card :class="$style['switch-card']">
-        <base-switch v-model="modelValue" :id="id" />
-        <label :for="id" :class="$style['switch__label']">{{ label }}</label>
-        <toast-root :duration="60000" :class="$style['toast-root']" v-model:open="modelValue">
-            <toast-title :class="$style['toast-title']">{{ toastTitle }}</toast-title>
-            <toast-description :class="$style['toast-description']">{{ toastDescription }}</toast-description>
-            <toast-action :class="$style['toast-action']" alt-text="Go to contacts" as-child>
-                <button :class="$style['toast-button']">Закрыть</button>
-            </toast-action>
-        </toast-root>
-        <toast-viewport :class="$style['toast-viewport']"/>
-    </base-card>
+  <base-card :class="$style['switch-card']">
+    <base-switch :id="id" v-model="modelValue" />
+    <label :for="id" :class="$style.switch__label">{{ label }}</label>
+    <toast-root v-model:open="modelValue" :duration="60000" :class="$style['toast-root']">
+      <toast-title :class="$style['toast-title']">
+        {{ toastTitle }}
+      </toast-title>
+      <toast-description :class="$style['toast-description']">
+        {{ toastDescription }}
+      </toast-description>
+      <toast-action :class="$style['toast-action']" alt-text="Go to contacts" as-child>
+        <button :class="$style['toast-button']">
+          {{ t('closeButton') }}
+        </button>
+      </toast-action>
+    </toast-root>
+    <toast-viewport :class="$style['toast-viewport']" />
+  </base-card>
 </template>
 
 <style lang="css" module>
@@ -136,7 +147,7 @@ defineProps<CalculateSwitchProps>()
 }
 
 .toast-button:active {
-  background-color: #4D7B92; 
+  background-color: #4D7B92;
   transform: translateY(0);
 }
 

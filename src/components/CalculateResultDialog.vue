@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import type { ShippingParams } from './const/calculate-routes'
+import type { I18nMessagesSchema } from '@/shared/types/i18n'
+import clsx from 'clsx'
+import { CheckCircleIcon, CircleX } from 'lucide-vue-next'
 import {
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -10,9 +13,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from 'reka-ui'
-import { CheckCircleIcon, CircleX } from 'lucide-vue-next'
-import clsx from 'clsx';
-import type { ShippingParams } from './const/calculate-routes';
+import { useI18n } from 'vue-i18n'
+
+const props = defineProps<CalculateResultDialogProps>()
+
+const emits = defineEmits<CalculateResultDialogEmits>()
+
+const { t } = useI18n<{ message: I18nMessagesSchema }>()
 
 type CalculateResultDialogProps = {
   class?: string
@@ -23,44 +30,53 @@ type CalculateResultDialogProps = {
 type CalculateResultDialogEmits = {
   (e: 'calcualteCost'): number
 }
-
-const props = defineProps<CalculateResultDialogProps>()
-const emits = defineEmits<CalculateResultDialogEmits>()
 </script>
 
 <template>
-    <AlertDialogRoot>
-        <AlertDialogTrigger :class="props.class">Рассчитать</AlertDialogTrigger>
-        <AlertDialogPortal>
-            <AlertDialogOverlay :class="$style.overlay"/>
-            <AlertDialogContent :class="$style.content">
-                <AlertDialogTitle>Итоговый рассчет</AlertDialogTitle>
-                <AlertDialogDescription :class="$style.description">Здесь вы можете ознакомиться с итоговым рассчетом. По завершении нажмите закрыть.</AlertDialogDescription>
-                <div>
-                    <div>Город отправления: {{ params.from }}</div>
-                    <div>Город получения: {{ params.to }}</div>
-                    <div>Тип груза: {{ params.cargoType }}</div>
-                    <div>Вес: {{ params.weight || 0 }}</div>
-                    <div>Количество {{ params.volumeCBM || 0 }}</div>
-                    <div>Таможенное оформление:
-                      <check-circle-icon :class="$style.icon" v-if="params.customsIncluded"/> 
-                      <circle-x :class="$style.icon" v-else/>
-                    </div>
-                    <div :style="{ display: 'inline-block'}">Страхование груза: 
-                      <check-circle-icon :class="$style.icon" v-if="params.insurance"/> 
-                      <circle-x :class="$style.icon" v-else/>
-                    </div>
-                </div>
-                <p v-if="cost > 0" :style="{  display: 'flex', justifyContent: 'flex-end', fontSize: '22px', 'margin': '15px 0px' }">Стоимость: {{ cost }} USD</p>
-                <div :style="{ display: 'flex', marginTop: '25px', alignItems: 'center', gap: '10px', justifyContent: 'flex-end', flexWrap: 'wrap' }">
-                    <button :class="clsx($style.button, $style['button--calc'])" @click="emits('calcualteCost')">Рассчитать</button>
-                    <AlertDialogCancel as-child>
-                        <button :class="$style.button">Закрыть</button>
-                    </AlertDialogCancel>
-                </div>
-            </AlertDialogContent>
-        </AlertDialogPortal>
-    </AlertDialogRoot>
+  <alert-dialog-root>
+    <alert-dialog-trigger :class="props.class">
+      {{ t('calculateButton') }}
+    </alert-dialog-trigger>
+    <alert-dialog-portal>
+      <alert-dialog-overlay :class="$style.overlay" />
+      <alert-dialog-content :class="$style.content">
+        <alert-dialog-title>{{ t('calculateResultDialog.finalCalculation') }}</alert-dialog-title>
+        <alert-dialog-description :class="$style.description">
+          {{ t('calculateResultDialog.description') }}
+        </alert-dialog-description>
+        <div>
+          <div>{{ t('calculateResultDialog.cityOfDeparture') }}: {{ params.from }}</div>
+          <div>{{ t('calculateResultDialog.cityOfReceipt') }}: {{ params.to }}</div>
+          <div>{{ t('calculateResultDialog.typeOfCargo') }}: {{ params.cargoType }}</div>
+          <div>{{ t('calculateResultDialog.weight') }}: {{ params.weight || 0 }}</div>
+          <div>{{ t('calculateResultDialog.amount') }}: {{ params.volumeCBM || 0 }}</div>
+          <div>
+            {{ t('customClearance.title') }}:
+            <check-circle-icon v-if="params.customsIncluded" :class="$style.icon" />
+            <circle-x v-else :class="$style.icon" />
+          </div>
+          <div :style="{ display: 'inline-block' }">
+            {{ t('cargoInsurance.title') }}:
+            <check-circle-icon v-if="params.insurance" :class="$style.icon" />
+            <circle-x v-else :class="$style.icon" />
+          </div>
+        </div>
+        <p v-if="cost > 0" :style="{ display: 'flex', justifyContent: 'flex-end', fontSize: '22px', margin: '15px 0px' }">
+          {{ t('calculateResultDialog.cost') }}: {{ cost }} USD
+        </p>
+        <div :style="{ display: 'flex', marginTop: '25px', alignItems: 'center', gap: '10px', justifyContent: 'flex-end', flexWrap: 'wrap' }">
+          <button :class="clsx($style.button, $style['button--calc'])" @click="emits('calcualteCost')">
+            {{ t('calculateButton') }}
+          </button>
+          <alert-dialog-cancel as-child>
+            <button :class="$style.button">
+              {{ t('closeButton') }}
+            </button>
+          </alert-dialog-cancel>
+        </div>
+      </alert-dialog-content>
+    </alert-dialog-portal>
+  </alert-dialog-root>
 </template>
 
 <style lang="css" module>

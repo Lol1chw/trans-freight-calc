@@ -1,20 +1,20 @@
 <script setup lang="ts">
+import type { I18nMessagesSchema } from '@/shared/types/i18n'
 import { TabItem, Tabs } from '@/shared/ui/tabs'
-import type { CargoType } from '@/shared/types/cargo';
 
 type CargoTabsProps = {
-  cargoTypes: string[]
+  cargoTypes: I18nMessagesSchema['cargoTabs']['cargoTypes']
 }
 
 defineProps<CargoTabsProps>()
-const modelValue = defineModel<CargoType>({ required: true })
+const modelValue = defineModel<string>({ required: true })
 </script>
 
 <template>
   <tabs v-model="modelValue" class="radio-group">
     <template v-for="cargoType in cargoTypes" :key="cargoType">
       <div>
-        <tab-item :value="cargoType" />
+        <tab-item :value="$rt(cargoType)" />
       </div>
     </template>
   </tabs>

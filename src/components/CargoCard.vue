@@ -1,15 +1,18 @@
 <script setup lang="ts">
+import type { I18nMessagesSchema } from '@/shared/types/i18n'
+import { clsx } from 'clsx'
+import { useI18n } from 'vue-i18n'
 import { BaseCard } from '@/shared/ui/card'
 import { InputGroup } from '@/shared/ui/input-group'
+
 import { NumberInput } from '@/shared/ui/number-input'
 import { BaseSelect } from '@/shared/ui/select'
-import { clsx } from 'clsx'
+
 import CargoTabs from './CargoTabs.vue'
 
-import type { CargoType } from '@/shared/types/cargo'
+const { tm } = useI18n<{ message: I18nMessagesSchema }>()
 
-const cargoTypes: CargoType[] = ['Коробки/Палеты']
-const cargoTypeModel = defineModel<CargoType>('cargo-type', { required: true })
+const cargoTypeModel = defineModel<string>('cargo-type', { required: true })
 const cargoVolumeCBMModel = defineModel<number>('cargo-volume', { required: true })
 const cargoWeightModel = defineModel<number>('cargo-weight', { required: true })
 const cargoWeightTypeModel = defineModel<'KG'>('cargo-weight-type', { required: true })
@@ -19,26 +22,25 @@ const cargoWeightTypeModel = defineModel<'KG'>('cargo-weight-type', { required: 
   <base-card :class="$style['cargo-card']">
     <div :class="$style['cargo-card__content-grid']">
       <div :class="$style['cargo-card__section-header']">
-        <span>Груз</span>
+        <span>{{ $t('cargoCard.title') }}</span>
       </div>
 
-        <div :class="$style['cargo-card__section-calculate']">
-          <cargo-tabs v-model="cargoTypeModel" :cargo-types="cargoTypes" />
-
-          <div :class="$style['section-calculate__wrapper']">
-            <div :class="$style['section-calculate__input-wrapper']">
-              <label :class="$style['section-calculate__label']">Объем</label>
-              <number-input :min="1" v-model="cargoVolumeCBMModel" />
-            </div>
-          </div>
-
-          <div :class="$style['section-calculate__container-weight']">
-            <label :class="$style['section-calculate__label']">Вес</label>
-            <input-group :min="500" v-model="cargoWeightModel">
-              <base-select disabled v-model="cargoWeightTypeModel" :options="['KG']" default-value="KG" :class-trigger="clsx($style.select, $style['select--disabled'])" />
-            </input-group>
+      <div :class="$style['cargo-card__section-calculate']">
+        <cargo-tabs v-model="cargoTypeModel" :cargo-types="tm('cargoTabs.cargoTypes')" />
+        <div :class="$style['section-calculate__wrapper']">
+          <div :class="$style['section-calculate__input-wrapper']">
+            <label :class="$style['section-calculate__label']">{{ $t('cargoCard.volume') }}</label>
+            <number-input v-model="cargoVolumeCBMModel" :min="1" />
           </div>
         </div>
+
+        <div :class="$style['section-calculate__container-weight']">
+          <label :class="$style['section-calculate__label']">{{ $t('cargoCard.weight') }}</label>
+          <input-group v-model="cargoWeightModel" :min="500">
+            <base-select v-model="cargoWeightTypeModel" disabled :options="['KG']" default-value="KG" :class-trigger="clsx($style.select, $style['select--disabled'])" />
+          </input-group>
+        </div>
+      </div>
     </div>
   </base-card>
 </template>
