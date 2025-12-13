@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { CargoCard, ShipmentDirectionCard, CalculateResultDialog, CalculateSwitch } from '@/components'
-import { BaseCard } from '@/shared/ui/card'
-import { BaseSwitch } from '@/shared/ui/switch'
-import { calculateShippingCost } from '@/components/const/calculate-routes'
-import { ROUTES } from '@/components/const/calculate-routes'
-
-import clsx from 'clsx'
-
-import type { CargoType } from '@/shared/types/cargo'
 import type { ShippingParams } from '@/components/const/calculate-routes'
+import type { CargoType } from '@/shared/types/cargo'
+import clsx from 'clsx'
 import { ToastProvider } from 'reka-ui'
+import { computed, ref, watch } from 'vue'
+import { CalculateResultDialog, CalculateSwitch, CargoCard, ShipmentDirectionCard } from '@/components'
+import { calculateShippingCost, ROUTES } from '@/components/const/calculate-routes'
+
+import { BaseCard } from '@/shared/ui/card'
+
+import { BaseSelect } from '@/shared/ui/select'
+import { BaseSwitch } from '@/shared/ui/switch'
+import { SwitchLanguage } from './components/switch-language'
 
 const defaultValues = {
   from: 'Hefei',
@@ -20,16 +21,16 @@ const defaultValues = {
   customsIncluded: false,
   insurance: false,
   cargoType: 'Коробки/Палеты',
-  cost: 0
+  cost: 0,
 }
 const fromCFSCountry = ['Китай']
 const toCFSCountry = ['Россия']
-const fromCFS = ['Hefei', 'Suzhou', 'Chongqing-manzhouli', "Xi'an-Manzhouli", 'Xian-Khorgos/Alashankou']
+const fromCFS = ['Hefei', 'Suzhou', 'Chongqing-manzhouli', 'Xi\'an-Manzhouli', 'Xian-Khorgos/Alashankou']
 const toCFS = ['Moscow', 'Saint Petersburg', 'Kaliningrad']
 const transportHubs = ['Город', 'Морской порт', 'Аэропорт', 'Ж/Д станция']
 
-type ChinaCity = typeof fromCFS[number];
-type RussiaCity = typeof toCFS[number];
+type ChinaCity = typeof fromCFS[number]
+type RussiaCity = typeof toCFS[number]
 
 type Country =
   | { from: 'Россия', to: 'Китай' }
@@ -40,7 +41,6 @@ type TransportHub = { from: 'Город', to: 'Город' }
 type City =
   | { from: RussiaCity, to: ChinaCity }
   | { from: ChinaCity, to: RussiaCity }
-
 
 const country = ref<Country>({ from: 'Китай', to: 'Россия' })
 const transportHub = ref<TransportHub>({ from: 'Город', to: 'Город' })
@@ -62,7 +62,7 @@ const params = computed<ShippingParams>(() => {
     volumeCBM: Number(cargoVolumeCBM.value),
     weight: Number(cargoWeight.value),
     customsIncluded: customsIncluded.value,
-    insurance: isCargoInsured.value
+    insurance: isCargoInsured.value,
   }
 })
 
@@ -80,7 +80,7 @@ const filteredToCFS = ref<string[]>([])
 
 watch(params, (params) => {
   if (params.from) {
-    const filteredRoutesTo = ROUTES.filter((el) => el.from === params.from).flatMap((el) => el.to)
+    const filteredRoutesTo = ROUTES.filter(el => el.from === params.from).flatMap(el => el.to)
     filteredToCFS.value = filteredRoutesTo
     if (!filteredRoutesTo.includes(city.value.to)) {
       city.value.to = filteredRoutesTo[0]
@@ -102,8 +102,13 @@ function calculateReset() {
 <template>
   <toast-provider>
     <div :class="$style.calculator">
-      <div :class="$style.calculator__title">
-        Получите рассчет стоимости заказа
+      <div :class="$style.calculator__header">
+        <div :class="$style.calculator__title">
+          Получите рассчет стоимости заказа {{ $t('message.price') }}
+        </div>
+        <div>
+          <switch-language />
+        </div>
       </div>
       <form :class="$style.form">
         <h1 :class="$style.form__title">
@@ -142,30 +147,33 @@ function calculateReset() {
               v-model:cargo-weight-type="cargoWeightType"
             />
           </div>
-          
-          <calculate-switch 
-            v-model="customsIncluded" 
-            id="Таможенное оформление" 
-            label="Таможенное оформление" 
-            toast-title="Таможенное оформление" 
+
+          <calculate-switch
+            id="Таможенное оформление"
+            v-model="customsIncluded"
+            label="Таможенное оформление"
+            toast-title="Таможенное оформление"
             toast-description="Чтобы включить таможенное оформление обратитесь к менеджеру в поле 'Контакты'"
           />
 
-          <calculate-switch 
-            v-model="isCargoInsured" 
-            id="Страхование груза" 
-            label="Страхование груза" 
-            toast-title="Страхование груза" 
+          <calculate-switch
+            id="Страхование груза"
+            v-model="isCargoInsured"
+            label="Страхование груза"
+            toast-title="Страхование груза"
             toast-description="Чтобы застраховать груз обратитесь к менеджеру в поле 'Контакты'"
           />
 
           <div :class="$style['form__button-group']">
-            <button :class="clsx($style['button-group__button'], $style['button-group__button--reset'])" @click.prevent="calculateReset">Сбросить</button>
-            <calculate-result-dialog 
-              :cost="cost" 
-              :params="params" 
-              :class="clsx($style['button-group__button'], $style['button-group__button--search'])" 
-              @calcualte-cost="cost = calculateShippingCost(params)" />
+            <button :class="clsx($style['button-group__button'], $style['button-group__button--reset'])" @click.prevent="calculateReset">
+              Сбросить
+            </button>
+            <calculate-result-dialog
+              :cost="cost"
+              :params="params"
+              :class="clsx($style['button-group__button'], $style['button-group__button--search'])"
+              @calcualte-cost="cost = calculateShippingCost(params)"
+            />
           </div>
         </div>
       </form>
@@ -174,9 +182,15 @@ function calculateReset() {
 </template>
 
 <style lang="css" module>
-
 .calculator {
   padding: 12px;
+}
+
+.calculator__header {
+  display: flex;
+  justify-content: space-between;
+  
+  margin-bottom: 10px;
 }
 
 .calculator__title {
@@ -184,7 +198,6 @@ function calculateReset() {
   font-family: 500;
   font-size: 14px;
   padding-left: 12px;
-  margin-bottom: 10px;
 }
 
 .form {
